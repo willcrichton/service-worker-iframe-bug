@@ -16,10 +16,10 @@ navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.
 
 ## Expected output
 
-The script running in the iframe should succeed in fetching `hello.txt` via the service worker on both the first and second visits.
+The scripts should succeed in fetching `hello.txt` via the service worker within the outer and inner frames on both the first and second visits.
 
 ## Actual behavior
 
 I ran this on aarch64 builds via my M1 Macbook Pro. Chrome v142.0.7444.60 and Safari 18.6 (20621.3.11.11.3) have the expected behavior. 
 
-Firefox 144.0.2 has unexpected behavior. On the first visit, the iframe gets a 404 because its request does not hit the service worker. On reload, the iframe hits the service worker as expected.
+Firefox 144.0.2 has unexpected behavior. On the first visit, the outer frame gets a 200 but the inner frame gets a 404 because its request does not hit the service worker. On reload, the inner frame hits the service worker as expected.
