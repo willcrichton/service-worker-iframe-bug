@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script>
+      async function testFetch() {
+        console.log("INNER: Fetching with service worker", navigator.serviceWorker.controller);
+        const response = await fetch("hello.txt");
+        if (response.status == 200) {
+          const text = await response.text();
+          console.log("INNER: Fetched contents of hello.txt: ", text);
+        } else {
+          console.log("INNER: Failed to fetch hello.txt", response);
+        }
+      }
+
+      async function main() {
+        await testFetch();
+      }
+
+      main()
+    </script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script>
+      async function testFetch() {
+        console.log("OUTER: Fetching with service worker", navigator.serviceWorker.controller);
+        const response = await fetch("hello.txt");
+        if (response.status == 200) {
+          const text = await response.text();
+          console.log("OUTER: Fetched contents of hello.txt in inner: ", text);
+        } else {
+          console.log("OUTER: Failed to fetch hello.txt", response);
+        }
+      }
+
+      function addIframe() {
+        const iframe = document.createElement("iframe");
+        iframe.src = "frame.html";
+        document.body.appendChild(iframe);
+      }
+
+      async function main() {
+        if (navigator.serviceWorker.controller === null)  {
+          navigator.serviceWorker.addEventListener("controllerchange", async () => {
+            console.log("OUTER: Activated service worker.");
+            await testFetch();
+            addIframe();
+          });
+
+          const reg = await navigator.serviceWorker.register("worker.js");
+          console.log("OUTER: Registered service worker.");
+        } else {
+          addIframe();
+        }
+      }
+
+      main()
+    </script>
+  </body>
+</html>
